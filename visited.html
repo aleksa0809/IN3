@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Home</title>
+  <meta name="keywords" content="text, test">
+  <meta name="description" content="very long text description">
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+	'use strict';
+	
+	let visitedCities = localStorage.getItem("visited");
+	visitedCities = visitedCities ? JSON.parse(visitedCities) : [];
+	
+	
+	
+	(async () => {
+		let responseS = await fetch('stad.json');
+		let cities = await responseS.json();
+		let population = 0;	
+		let x = '';				
+		if(visitedCities.length){
+			for(let i=0; i<cities.length; i++){
+				if(visitedCities.includes(cities[i].id)){
+					population += parseInt(cities[i].population);
+					x += '<div>' + cities[i].stadname + "</div>";
+				}
+			};
+		}			
+		x += "Population: "+population;
+		document.getElementById("app").innerHTML = x;
+		document.getElementById("app").insertAdjacentHTML('beforeend', '</br><a href="index.html">back home</a>');		
+		document.getElementById("app").insertAdjacentHTML('beforeend', '</br><button>clear history</button>');
+
+		document.getElementsByTagName("button")[0].addEventListener('click', function(){
+			localStorage.clear();
+		});
+		
+	})();
+	
+});
+</script>
+
+</body>
+</html>
